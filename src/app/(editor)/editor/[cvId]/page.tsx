@@ -8,6 +8,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useCV } from "@/context/CVContext"
 import { PersonalInfoEditor } from "@/components/editor/cv-sections/PersonalInfoEditor"
 import { ModernTemplate } from "@/components/templates/ModernTemplate"
+import { MinimalistTemplate } from "@/components/templates/MinimalistTemplate"
+import { DesignEditor } from "@/components/editor/DesignEditor"
 
 import { SummaryEditor } from "@/components/editor/cv-sections/SummaryEditor"
 import { ExperienceEditor } from "@/components/editor/cv-sections/ExperienceEditor"
@@ -101,9 +103,7 @@ export default function EditorPage({ params }: { params: { cvId: string } }) {
                             </TabsContent>
 
                             <TabsContent value="design" className="mt-0">
-                                <div className="text-center py-10 text-muted-foreground">
-                                    Options de design à venir...
-                                </div>
+                                <DesignEditor />
                             </TabsContent>
 
                             <TabsContent value="settings" className="mt-0">
@@ -118,11 +118,19 @@ export default function EditorPage({ params }: { params: { cvId: string } }) {
                 {/* Zone de prévisualisation (Droite) */}
                 <main className="flex-1 bg-muted/30 overflow-y-auto p-8 flex justify-center">
                     <div className="w-[210mm] min-h-[297mm] bg-white shadow-xl rounded-sm origin-top transform scale-[0.6] md:scale-[0.8] lg:scale-[0.9] xl:scale-100 transition-transform duration-200">
-                        <ModernTemplate
-                            data={cv.data}
-                            colorScheme={cv.colorScheme}
-                            fontFamily={cv.fontFamily}
-                        />
+                        {cv.templateId === 'minimalist' ? (
+                            <MinimalistTemplate
+                                data={cv.data}
+                                colorScheme={cv.colorScheme}
+                                fontFamily={cv.fontFamily}
+                            />
+                        ) : (
+                            <ModernTemplate
+                                data={cv.data}
+                                colorScheme={cv.colorScheme}
+                                fontFamily={cv.fontFamily}
+                            />
+                        )}
                     </div>
                 </main>
             </div>

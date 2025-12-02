@@ -122,7 +122,7 @@ export function ModernTemplate({ data, colorScheme = 'blue', fontFamily = 'inter
                                             </span>
                                         </div>
                                         <div className="text-sm text-gray-600">
-                                            {edu.school} {edu.location && `• ${edu.location}`}
+                                            {edu.institution} {edu.location && `• ${edu.location}`}
                                         </div>
                                         {edu.description && (
                                             <p className="text-sm text-gray-500 mt-1">{edu.description}</p>

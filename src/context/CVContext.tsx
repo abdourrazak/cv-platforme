@@ -131,7 +131,40 @@ const CVContext = createContext<{
 } | null>(null)
 
 export function CVProvider({ children, initialData }: { children: React.ReactNode; initialData?: CV }) {
-    const [cv, dispatch] = useReducer(cvReducer, initialData || initialCV)
+    // Charger depuis localStorage au démarrage
+    const getInitialState = (): CV => {
+        if (typeof window === 'undefined') return initialData || initialCV
+
+        try {
+            const savedCV = localStorage.getItem('current-cv')
+            if (savedCV) {
+                const parsed = JSON.parse(savedCV)
+                // Reconvertir les dates
+                return {
+                    ...parsed,
+                    createdAt: new Date(parsed.createdAt),
+                    updatedAt: new Date(parsed.updatedAt),
+                }
+            }
+        } catch (error) {
+            console.error('Error loading CV from localStorage:', error)
+        }
+
+        return initialData || initialCV
+    }
+
+    const [cv, dispatch] = useReducer(cvReducer, null, getInitialState)
+
+    // Sauvegarder automatiquement dans localStorage à chaque modification
+    React.useEffect(() => {
+        if (typeof window !== 'undefined') {
+            try {
+                localStorage.setItem('current-cv', JSON.stringify(cv))
+            } catch (error) {
+                console.error('Error saving CV to localStorage:', error)
+            }
+        }
+    }, [cv])
 
     return (
         <CVContext.Provider value={{ cv, dispatch }}>
