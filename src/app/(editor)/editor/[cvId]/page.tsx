@@ -5,9 +5,13 @@ import { Button } from "@/components/ui/button"
 import { ArrowLeft, Save, Download, Share2, LayoutTemplate } from "lucide-react"
 import Link from "next/link"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useCV } from "@/context/CVContext"
+import { PersonalInfoEditor } from "@/components/editor/cv-sections/PersonalInfoEditor"
+import { ModernTemplate } from "@/components/templates/ModernTemplate"
 
 export default function EditorPage({ params }: { params: { cvId: string } }) {
     const [activeTab, setActiveTab] = useState("content")
+    const { cv } = useCV()
 
     return (
         <div className="flex flex-col h-full">
@@ -22,10 +26,12 @@ export default function EditorPage({ params }: { params: { cvId: string } }) {
                     <div className="flex flex-col">
                         <input
                             type="text"
-                            defaultValue="Mon CV Professionnel"
+                            defaultValue={cv.title}
                             className="font-semibold bg-transparent border-none p-0 focus:ring-0 text-sm md:text-base"
                         />
-                        <span className="text-xs text-muted-foreground">Dernière sauvegarde : 10:42</span>
+                        <span className="text-xs text-muted-foreground">
+                            Dernière modification : {new Date().toLocaleTimeString()}
+                        </span>
                     </div>
                 </div>
 
@@ -62,11 +68,10 @@ export default function EditorPage({ params }: { params: { cvId: string } }) {
                             </TabsList>
                         </div>
 
-                        <div className="flex-1 overflow-y-auto p-4">
+                        <div className="flex-1 overflow-y-auto p-4 bg-gray-50/50">
                             <TabsContent value="content" className="mt-0 space-y-6">
-                                <div className="text-center py-10 text-muted-foreground">
-                                    Composants d'édition de contenu à venir...
-                                </div>
+                                <PersonalInfoEditor />
+                                {/* D'autres éditeurs seront ajoutés ici (Expérience, Formation, etc.) */}
                             </TabsContent>
 
                             <TabsContent value="design" className="mt-0">
@@ -86,11 +91,12 @@ export default function EditorPage({ params }: { params: { cvId: string } }) {
 
                 {/* Zone de prévisualisation (Droite) */}
                 <main className="flex-1 bg-muted/30 overflow-y-auto p-8 flex justify-center">
-                    <div className="w-[210mm] min-h-[297mm] bg-white shadow-xl rounded-sm origin-top transform scale-[0.8] md:scale-100 transition-transform duration-200">
-                        {/* Le rendu du CV se fera ici */}
-                        <div className="p-12 text-center text-gray-400 mt-20">
-                            Aperçu du CV en temps réel
-                        </div>
+                    <div className="w-[210mm] min-h-[297mm] bg-white shadow-xl rounded-sm origin-top transform scale-[0.6] md:scale-[0.8] lg:scale-[0.9] xl:scale-100 transition-transform duration-200">
+                        <ModernTemplate
+                            data={cv.data}
+                            colorScheme={cv.colorScheme}
+                            fontFamily={cv.fontFamily}
+                        />
                     </div>
                 </main>
             </div>
