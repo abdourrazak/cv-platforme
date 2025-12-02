@@ -34,7 +34,6 @@
         "@hookform/resolvers": "^3.9.1",
         "jspdf": "^2.5.2",
         "html2canvas": "^1.4.1",
-        "@hello-pangea/dnd": "^17.0.0",
         "date-fns": "^4.1.0",
         "nanoid": "^5.0.8"
     },
