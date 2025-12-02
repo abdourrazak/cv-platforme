@@ -70,7 +70,55 @@ function cvReducer(state: CV, action: Action): CV {
                 data: { ...state.data, summary: action.payload },
                 updatedAt: new Date(),
             }
-        // ... autres cas à implémenter pour une gestion complète
+        case 'ADD_ITEM': {
+            const { section, item } = action.payload
+            return {
+                ...state,
+                data: {
+                    ...state.data,
+                    [section]: [...(state.data[section as keyof CVData] as any[]), item],
+                },
+                updatedAt: new Date(),
+            }
+        }
+        case 'UPDATE_ITEM': {
+            const { section, id, item } = action.payload
+            return {
+                ...state,
+                data: {
+                    ...state.data,
+                    [section]: (state.data[section as keyof CVData] as any[]).map((i) =>
+                        i.id === id ? { ...i, ...(item as any) } : i
+                    ),
+                },
+                updatedAt: new Date(),
+            }
+        }
+        case 'REMOVE_ITEM': {
+            const { section, id } = action.payload
+            return {
+                ...state,
+                data: {
+                    ...state.data,
+                    [section]: (state.data[section as keyof CVData] as any[]).filter(
+                        (i) => i.id !== id
+                    ),
+                },
+                updatedAt: new Date(),
+            }
+        }
+        case 'REORDER_SECTIONS':
+            return {
+                ...state,
+                data: { ...state.data, sectionOrder: action.payload },
+                updatedAt: new Date(),
+            }
+        case 'UPDATE_METADATA':
+            return {
+                ...state,
+                ...action.payload,
+                updatedAt: new Date(),
+            }
         default:
             return state
     }

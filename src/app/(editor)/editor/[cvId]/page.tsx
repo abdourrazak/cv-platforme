@@ -9,9 +9,21 @@ import { useCV } from "@/context/CVContext"
 import { PersonalInfoEditor } from "@/components/editor/cv-sections/PersonalInfoEditor"
 import { ModernTemplate } from "@/components/templates/ModernTemplate"
 
+import { SummaryEditor } from "@/components/editor/cv-sections/SummaryEditor"
+import { ExperienceEditor } from "@/components/editor/cv-sections/ExperienceEditor"
+import { EducationEditor } from "@/components/editor/cv-sections/EducationEditor"
+import { SkillsEditor } from "@/components/editor/cv-sections/SkillsEditor"
+import { LanguagesEditor } from "@/components/editor/cv-sections/LanguagesEditor"
+
+import { downloadPDF } from "@/lib/pdf"
+
 export default function EditorPage({ params }: { params: { cvId: string } }) {
     const [activeTab, setActiveTab] = useState("content")
     const { cv } = useCV()
+
+    const handleDownload = async () => {
+        await downloadPDF("cv-preview", `${cv.data.personalInfo.firstName}-${cv.data.personalInfo.lastName}-CV.pdf`)
+    }
 
     return (
         <div className="flex flex-col h-full">
@@ -48,7 +60,7 @@ export default function EditorPage({ params }: { params: { cvId: string } }) {
                         <Share2 className="w-4 h-4 mr-2" />
                         Partager
                     </Button>
-                    <Button size="sm">
+                    <Button size="sm" onClick={handleDownload}>
                         <Download className="w-4 h-4 mr-2" />
                         Exporter PDF
                     </Button>
@@ -69,9 +81,23 @@ export default function EditorPage({ params }: { params: { cvId: string } }) {
                         </div>
 
                         <div className="flex-1 overflow-y-auto p-4 bg-gray-50/50">
-                            <TabsContent value="content" className="mt-0 space-y-6">
+                            <TabsContent value="content" className="mt-0 space-y-8 pb-20">
                                 <PersonalInfoEditor />
-                                {/* D'autres éditeurs seront ajoutés ici (Expérience, Formation, etc.) */}
+                                <SummaryEditor />
+                                <div className="space-y-6">
+                                    <div className="border-t pt-6">
+                                        <ExperienceEditor />
+                                    </div>
+                                    <div className="border-t pt-6">
+                                        <EducationEditor />
+                                    </div>
+                                    <div className="border-t pt-6">
+                                        <SkillsEditor />
+                                    </div>
+                                    <div className="border-t pt-6">
+                                        <LanguagesEditor />
+                                    </div>
+                                </div>
                             </TabsContent>
 
                             <TabsContent value="design" className="mt-0">
