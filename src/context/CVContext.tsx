@@ -1,6 +1,6 @@
 "use client"
 
-import React, { createContext, useContext, useReducer, useEffect } from 'react'
+import React, { createContext, useContext, useReducer } from 'react'
 import { CV, CVData, CVSection } from '@/types/cv'
 import { DEFAULT_SECTION_ORDER } from '@/lib/constants'
 
@@ -44,8 +44,8 @@ type Action =
     | { type: 'SET_CV'; payload: CV }
     | { type: 'UPDATE_PERSONAL_INFO'; payload: Partial<CVData['personalInfo']> }
     | { type: 'UPDATE_SUMMARY'; payload: string }
-    | { type: 'ADD_ITEM'; payload: { section: CVSection; item: any } }
-    | { type: 'UPDATE_ITEM'; payload: { section: CVSection; id: string; item: any } }
+    | { type: 'ADD_ITEM'; payload: { section: CVSection; item: unknown } }
+    | { type: 'UPDATE_ITEM'; payload: { section: CVSection; id: string; item: unknown } }
     | { type: 'REMOVE_ITEM'; payload: { section: CVSection; id: string } }
     | { type: 'REORDER_SECTIONS'; payload: string[] }
     | { type: 'UPDATE_METADATA'; payload: Partial<Omit<CV, 'data'>> }

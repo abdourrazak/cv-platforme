@@ -1,7 +1,6 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { FadeIn } from "@/components/animations/FadeIn"
 import { StaggerChildren } from "@/components/animations/StaggerChildren"
 import { Plus, FileText, MoreVertical, Calendar } from "lucide-react"
 
