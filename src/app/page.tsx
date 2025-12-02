@@ -1,62 +1,100 @@
+"use client"
+
+import { useEffect } from "react"
+import { useSession } from "next-auth/react"
+import { useRouter } from "next/navigation"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
+import { FileText, Palette, Download, Zap } from "lucide-react"
 import { FadeIn } from "@/components/animations/FadeIn"
 import { StaggerChildren } from "@/components/animations/StaggerChildren"
 
-export default function HomePage() {
-    return (
-        <main className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5">
-            <div className="container mx-auto px-4 py-16">
-                <FadeIn className="flex flex-col items-center justify-center min-h-[80vh] text-center">
-                    <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-                        CV Platforme
-                    </h1>
-                    <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl">
-                        Créez votre CV professionnel en quelques minutes avec nos templates modernes
-                    </p>
+export default function Home() {
+    const { data: session, status } = useSession()
+    const router = useRouter()
 
-                    <div className="flex flex-col sm:flex-row gap-4 mb-16">
-                        <Button size="lg" className="text-base">
-                            Créer mon CV gratuitement
-                        </Button>
-                        <Button size="lg" variant="outline" className="text-base">
-                            Voir les templates
-                        </Button>
+    useEffect(() => {
+        if (status === "authenticated") {
+            router.push("/dashboard")
+        }
+    }, [status, router])
+
+    if (status === "loading") {
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+            </div>
+        )
+    }
+
+    return (
+        <main className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50">
+            <FadeIn>
+                <div className="container mx-auto px-4 py-16">
+                    <div className="text-center mb-16">
+                        <div className="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-2xl mb-6">
+                            <FileText className="w-8 h-8 text-white" />
+                        </div>
+                        <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+                            Créez votre CV professionnel
+                        </h1>
+                        <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+                            Des templates modernes, un éditeur intuitif et un export PDF de qualité professionnelle
+                        </p>
+                        <div className="flex gap-4 justify-center">
+                            <Button asChild size="lg" className="text-lg px-8">
+                                <Link href="/auth/signup">
+                                    Commencer gratuitement
+                                </Link>
+                            </Button>
+                            <Button asChild variant="outline" size="lg" className="text-lg px-8">
+                                <Link href="/auth/signin">
+                                    Se connecter
+                                </Link>
+                            </Button>
+                        </div>
                     </div>
 
-                    <StaggerChildren className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl w-full">
-                        <Card className="border-2 hover:border-primary/50 transition-colors">
-                            <CardHeader>
-                                <div className="text-5xl mb-4">🎨</div>
-                                <CardTitle>Templates modernes</CardTitle>
-                                <CardDescription>
-                                    Choisissez parmi une sélection de templates professionnels et élégants
-                                </CardDescription>
-                            </CardHeader>
+                    <StaggerChildren className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                        <Card className="border-2 hover:border-primary transition-colors">
+                            <CardContent className="pt-6">
+                                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+                                    <Palette className="w-6 h-6 text-purple-600" />
+                                </div>
+                                <h3 className="text-xl font-semibold mb-2">Templates Modernes</h3>
+                                <p className="text-gray-600">
+                                    Choisissez parmi plusieurs designs professionnels et personnalisez les couleurs
+                                </p>
+                            </CardContent>
                         </Card>
 
-                        <Card className="border-2 hover:border-secondary/50 transition-colors">
-                            <CardHeader>
-                                <div className="text-5xl mb-4">✏️</div>
-                                <CardTitle>Éditeur en temps réel</CardTitle>
-                                <CardDescription>
+                        <Card className="border-2 hover:border-primary transition-colors">
+                            <CardContent className="pt-6">
+                                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                                    <Zap className="w-6 h-6 text-blue-600" />
+                                </div>
+                                <h3 className="text-xl font-semibold mb-2">Édition en temps réel</h3>
+                                <p className="text-gray-600">
                                     Visualisez vos modifications instantanément pendant que vous éditez
-                                </CardDescription>
-                            </CardHeader>
+                                </p>
+                            </CardContent>
                         </Card>
 
-                        <Card className="border-2 hover:border-accent/50 transition-colors">
-                            <CardHeader>
-                                <div className="text-5xl mb-4">📥</div>
-                                <CardTitle>Export PDF</CardTitle>
-                                <CardDescription>
+                        <Card className="border-2 hover:border-primary transition-colors">
+                            <CardContent className="pt-6">
+                                <div className="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center mb-4">
+                                    <Download className="w-6 h-6 text-pink-600" />
+                                </div>
+                                <h3 className="text-xl font-semibold mb-2">Export PDF</h3>
+                                <p className="text-gray-600">
                                     Téléchargez votre CV en haute qualité, prêt à être envoyé
-                                </CardDescription>
-                            </CardHeader>
+                                </p>
+                            </CardContent>
                         </Card>
                     </StaggerChildren>
-                </FadeIn>
-            </div>
+                </div>
+            </FadeIn>
         </main>
-    );
+    )
 }
