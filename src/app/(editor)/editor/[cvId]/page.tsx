@@ -163,9 +163,9 @@ export default function EditorPage({ params }: { params: { cvId: string } }) {
             {/* Zone principale */}
             <div className="flex-1 flex overflow-hidden">
                 {/* Panneau latéral gauche (Édition) */}
-                <aside className="w-full md:w-[450px] border-r bg-card flex flex-col overflow-hidden">
-                    <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
-                        <div className="px-4 pt-4 pb-2 border-b">
+                <aside className="w-full md:w-[450px] border-r bg-card flex flex-col">
+                    <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
+                        <div className="px-4 pt-4 pb-2 border-b shrink-0">
                             <TabsList className="w-full grid grid-cols-3">
                                 <TabsTrigger value="content">Contenu</TabsTrigger>
                                 <TabsTrigger value="design">Design</TabsTrigger>
@@ -173,36 +173,34 @@ export default function EditorPage({ params }: { params: { cvId: string } }) {
                             </TabsList>
                         </div>
 
-                        <div className="flex-1 overflow-y-auto p-4 bg-gray-50/50 h-full">
-                            <TabsContent value="content" className="mt-0 space-y-8 pb-20">
-                                <PersonalInfoEditor />
-                                <SummaryEditor />
-                                <div className="space-y-6">
-                                    <div className="border-t pt-6">
-                                        <ExperienceEditor />
-                                    </div>
-                                    <div className="border-t pt-6">
-                                        <EducationEditor />
-                                    </div>
-                                    <div className="border-t pt-6">
-                                        <SkillsEditor />
-                                    </div>
-                                    <div className="border-t pt-6">
-                                        <LanguagesEditor />
-                                    </div>
+                        <TabsContent value="content" className="flex-1 overflow-y-auto p-4 bg-gray-50/50 m-0 space-y-8 pb-20">
+                            <PersonalInfoEditor />
+                            <SummaryEditor />
+                            <div className="space-y-6">
+                                <div className="border-t pt-6">
+                                    <ExperienceEditor />
                                 </div>
-                            </TabsContent>
-
-                            <TabsContent value="design" className="mt-0">
-                                <DesignEditor />
-                            </TabsContent>
-
-                            <TabsContent value="settings" className="mt-0">
-                                <div className="text-center py-10 text-muted-foreground">
-                                    Paramètres à venir...
+                                <div className="border-t pt-6">
+                                    <EducationEditor />
                                 </div>
-                            </TabsContent>
-                        </div>
+                                <div className="border-t pt-6">
+                                    <SkillsEditor />
+                                </div>
+                                <div className="border-t pt-6">
+                                    <LanguagesEditor />
+                                </div>
+                            </div>
+                        </TabsContent>
+
+                        <TabsContent value="design" className="flex-1 overflow-y-auto p-4 bg-gray-50/50 m-0">
+                            <DesignEditor />
+                        </TabsContent>
+
+                        <TabsContent value="settings" className="flex-1 overflow-y-auto p-4 bg-gray-50/50 m-0">
+                            <div className="text-center py-10 text-muted-foreground">
+                                Paramètres à venir...
+                            </div>
+                        </TabsContent>
                     </Tabs>
                 </aside>
 
