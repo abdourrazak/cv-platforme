@@ -29,6 +29,12 @@ const TEMPLATES = [
         name: 'Exécutif',
         description: 'Sobre et structuré pour les cadres',
         preview: '/templates/executive-preview.png'
+    },
+    {
+        id: 'professional',
+        name: 'Professionnel',
+        description: 'Style académique classique (Harvard)',
+        preview: '/templates/professional-preview.png'
     }
 ]
 

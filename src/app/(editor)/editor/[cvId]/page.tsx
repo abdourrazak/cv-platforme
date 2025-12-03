@@ -13,6 +13,7 @@ import { ModernTemplate } from "@/components/templates/ModernTemplate"
 import { MinimalistTemplate } from "@/components/templates/MinimalistTemplate"
 import { CreativeTemplate } from "@/components/templates/CreativeTemplate"
 import { ExecutiveTemplate } from "@/components/templates/ExecutiveTemplate"
+import { ProfessionalTemplate } from "@/components/templates/ProfessionalTemplate"
 import { DesignEditor } from "@/components/editor/DesignEditor"
 import { SummaryEditor } from "@/components/editor/cv-sections/SummaryEditor"
 import { ExperienceEditor } from "@/components/editor/cv-sections/ExperienceEditor"
@@ -100,6 +101,8 @@ export default function EditorPage({ params }: { params: { cvId: string } }) {
                 return <CreativeTemplate data={cv.data} colorScheme={cv.colorScheme} fontFamily={cv.fontFamily} />
             case 'executive':
                 return <ExecutiveTemplate data={cv.data} colorScheme={cv.colorScheme} fontFamily={cv.fontFamily} />
+            case 'professional':
+                return <ProfessionalTemplate data={cv.data} colorScheme={cv.colorScheme} fontFamily={cv.fontFamily} />
             case 'modern':
             default:
                 return <ModernTemplate data={cv.data} colorScheme={cv.colorScheme} fontFamily={cv.fontFamily} />
@@ -170,7 +173,7 @@ export default function EditorPage({ params }: { params: { cvId: string } }) {
                             </TabsList>
                         </div>
 
-                        <div className="flex-1 overflow-y-auto p-4 bg-gray-50/50">
+                        <div className="flex-1 overflow-y-auto p-4 bg-gray-50/50 h-full">
                             <TabsContent value="content" className="mt-0 space-y-8 pb-20">
                                 <PersonalInfoEditor />
                                 <SummaryEditor />

@@ -4,6 +4,7 @@ import { ModernTemplate } from "@/components/templates/ModernTemplate"
 import { MinimalistTemplate } from "@/components/templates/MinimalistTemplate"
 import { CreativeTemplate } from "@/components/templates/CreativeTemplate"
 import { ExecutiveTemplate } from "@/components/templates/ExecutiveTemplate"
+import { ProfessionalTemplate } from "@/components/templates/ProfessionalTemplate"
 import { Button } from "@/components/ui/button"
 import { Download, FileText } from "lucide-react"
 import Link from "next/link"
@@ -47,6 +48,8 @@ export default async function SharedCVPage({ params }: { params: { shareId: stri
                 return <CreativeTemplate data={cv.data} colorScheme={cv.colorScheme} fontFamily={cv.fontFamily} />
             case 'executive':
                 return <ExecutiveTemplate data={cv.data} colorScheme={cv.colorScheme} fontFamily={cv.fontFamily} />
+            case 'professional':
+                return <ProfessionalTemplate data={cv.data} colorScheme={cv.colorScheme} fontFamily={cv.fontFamily} />
             case 'modern':
             default:
                 return <ModernTemplate data={cv.data} colorScheme={cv.colorScheme} fontFamily={cv.fontFamily} />
