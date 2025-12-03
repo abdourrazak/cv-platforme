@@ -1,6 +1,5 @@
 import React from 'react'
 import { CVData } from '@/types/cv'
-import { MapPin, Mail, Phone, Globe, Linkedin } from 'lucide-react'
 
 interface TemplateProps {
     data: CVData
@@ -11,53 +10,54 @@ interface TemplateProps {
 export function MinimalistTemplate({ data, colorScheme = 'black', fontFamily = 'inter' }: TemplateProps) {
     const { personalInfo, summary, experiences, education, skills, languages } = data
 
-    return (
-        <div className="w-full h-full bg-white min-h-[297mm] p-12 text-gray-900" id="cv-preview">
-            {/* Header - Centré et épuré */}
-            <header className="text-center mb-12 pb-6 border-b border-gray-200">
-                <h1 className="text-3xl font-light tracking-wide uppercase mb-2">
-                    {personalInfo.firstName} {personalInfo.lastName}
-                </h1>
-                <h2 className="text-base text-gray-600 font-light mb-4">{personalInfo.title}</h2>
+    const colors = {
+        blue: { accent: '#2563eb', light: '#eff6ff' },
+        purple: { accent: '#7c3aed', light: '#f5f3ff' },
+        green: { accent: '#059669', light: '#ecfdf5' },
+        red: { accent: '#dc2626', light: '#fef2f2' },
+        black: { accent: '#111827', light: '#f9fafb' },
+    }
 
-                <div className="flex flex-wrap justify-center gap-x-6 gap-y-1 text-xs text-gray-500">
-                    {personalInfo.email && (
-                        <div className="flex items-center gap-1">
-                            <Mail size={12} />
-                            <span>{personalInfo.email}</span>
+    const theme = colors[colorScheme as keyof typeof colors] || colors.black
+
+    return (
+        <div className="w-full h-full min-h-[297mm] bg-white p-12 font-sans" id="cv-preview">
+            {/* Header minimaliste */}
+            <header className="mb-10 pb-8 border-b-2" style={{ borderColor: theme.accent }}>
+                <div className="flex items-start justify-between mb-6">
+                    <div className="flex-1">
+                        <h1 className="text-6xl font-light mb-3 tracking-tight text-gray-900">
+                            {personalInfo.firstName}
+                        </h1>
+                        <h1 className="text-6xl font-bold mb-4 tracking-tight" style={{ color: theme.accent }}>
+                            {personalInfo.lastName}
+                        </h1>
+                        <p className="text-lg text-gray-600 font-light tracking-wide">
+                            {personalInfo.title}
+                        </p>
+                    </div>
+                    {personalInfo.photo && (
+                        <div className="w-32 h-32 rounded-full overflow-hidden grayscale hover:grayscale-0 transition-all">
+                            <img src={personalInfo.photo} alt="Profile" className="w-full h-full object-cover" />
                         </div>
                     )}
-                    {personalInfo.phone && (
-                        <div className="flex items-center gap-1">
-                            <Phone size={12} />
-                            <span>{personalInfo.phone}</span>
-                        </div>
-                    )}
+                </div>
+
+                <div className="grid grid-cols-2 gap-x-8 gap-y-1 text-sm text-gray-600 mt-6">
+                    {personalInfo.email && <div>{personalInfo.email}</div>}
+                    {personalInfo.phone && <div>{personalInfo.phone}</div>}
                     {(personalInfo.city || personalInfo.country) && (
-                        <div className="flex items-center gap-1">
-                            <MapPin size={12} />
-                            <span>{[personalInfo.city, personalInfo.country].filter(Boolean).join(', ')}</span>
-                        </div>
+                        <div>{[personalInfo.city, personalInfo.country].filter(Boolean).join(', ')}</div>
                     )}
-                    {personalInfo.website && (
-                        <div className="flex items-center gap-1">
-                            <Globe size={12} />
-                            <span>{personalInfo.website}</span>
-                        </div>
-                    )}
-                    {personalInfo.linkedin && (
-                        <div className="flex items-center gap-1">
-                            <Linkedin size={12} />
-                            <span>{personalInfo.linkedin}</span>
-                        </div>
-                    )}
+                    {personalInfo.linkedin && <div className="truncate">{personalInfo.linkedin}</div>}
+                    {personalInfo.website && <div className="truncate">{personalInfo.website}</div>}
                 </div>
             </header>
 
             {/* Summary */}
             {summary && (
                 <section className="mb-10">
-                    <p className="text-sm leading-relaxed text-gray-700 text-center italic max-w-3xl mx-auto">
+                    <p className="text-gray-700 leading-relaxed text-justify border-l-4 pl-6 italic" style={{ borderColor: theme.accent }}>
                         {summary}
                     </p>
                 </section>
@@ -66,22 +66,26 @@ export function MinimalistTemplate({ data, colorScheme = 'black', fontFamily = '
             {/* Experience */}
             {experiences.length > 0 && (
                 <section className="mb-10">
-                    <h3 className="text-sm font-semibold uppercase tracking-wider mb-6 text-gray-900 border-b pb-2">
+                    <h2 className="text-xs font-bold uppercase tracking-widest mb-6 text-gray-400">
                         Expérience Professionnelle
-                    </h3>
-                    <div className="space-y-6">
+                    </h2>
+                    <div className="space-y-8">
                         {experiences.map((exp) => (
-                            <div key={exp.id} className="relative pl-4 border-l-2 border-gray-200">
-                                <div className="flex justify-between items-baseline mb-1">
-                                    <h4 className="font-semibold text-gray-900">{exp.position}</h4>
-                                    <span className="text-xs text-gray-500 whitespace-nowrap ml-4">
-                                        {exp.startDate} - {exp.current ? 'Présent' : exp.endDate}
+                            <div key={exp.id}>
+                                <div className="flex items-baseline justify-between mb-2">
+                                    <h3 className="text-xl font-bold text-gray-900">{exp.position}</h3>
+                                    <span className="text-xs text-gray-500 font-medium whitespace-nowrap ml-4">
+                                        {exp.startDate} — {exp.current ? 'Présent' : exp.endDate}
                                     </span>
                                 </div>
-                                <div className="text-sm text-gray-600 mb-2">
-                                    {exp.company} {exp.location && `• ${exp.location}`}
+                                <div className="flex items-center gap-2 mb-3">
+                                    <span className="font-semibold" style={{ color: theme.accent }}>
+                                        {exp.company}
+                                    </span>
+                                    <span className="text-gray-400">•</span>
+                                    <span className="text-sm text-gray-500">{exp.location}</span>
                                 </div>
-                                <p className="text-sm text-gray-600 leading-relaxed whitespace-pre-line">
+                                <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-line">
                                     {exp.description}
                                 </p>
                             </div>
@@ -90,66 +94,72 @@ export function MinimalistTemplate({ data, colorScheme = 'black', fontFamily = '
                 </section>
             )}
 
-            {/* Education */}
-            {education.length > 0 && (
-                <section className="mb-10">
-                    <h3 className="text-sm font-semibold uppercase tracking-wider mb-6 text-gray-900 border-b pb-2">
-                        Formation
-                    </h3>
-                    <div className="space-y-4">
-                        {education.map((edu) => (
-                            <div key={edu.id} className="relative pl-4 border-l-2 border-gray-200">
-                                <div className="flex justify-between items-baseline mb-1">
-                                    <h4 className="font-semibold text-gray-900">{edu.degree}</h4>
-                                    <span className="text-xs text-gray-500 whitespace-nowrap ml-4">
-                                        {edu.startDate} - {edu.current ? 'Présent' : edu.endDate}
+            <div className="grid grid-cols-2 gap-12">
+                {/* Education */}
+                {education.length > 0 && (
+                    <section>
+                        <h2 className="text-xs font-bold uppercase tracking-widest mb-6 text-gray-400">
+                            Formation
+                        </h2>
+                        <div className="space-y-6">
+                            {education.map((edu) => (
+                                <div key={edu.id}>
+                                    <h3 className="font-bold text-gray-900 mb-1">{edu.degree}</h3>
+                                    <div className="text-sm font-semibold mb-1" style={{ color: theme.accent }}>
+                                        {edu.institution}
+                                    </div>
+                                    <div className="text-xs text-gray-500">
+                                        {edu.startDate} — {edu.endDate}
+                                    </div>
+                                    {edu.description && (
+                                        <p className="text-sm text-gray-600 mt-2">{edu.description}</p>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+                )}
+
+                {/* Skills & Languages */}
+                <section className="space-y-8">
+                    {skills.length > 0 && (
+                        <div>
+                            <h2 className="text-xs font-bold uppercase tracking-widest mb-6 text-gray-400">
+                                Compétences
+                            </h2>
+                            <div className="flex flex-wrap gap-2">
+                                {skills.map((skill) => (
+                                    <span
+                                        key={skill.id}
+                                        className="text-xs font-medium px-3 py-1.5 rounded-full border"
+                                        style={{
+                                            borderColor: theme.accent,
+                                            color: theme.accent
+                                        }}
+                                    >
+                                        {skill.name}
                                     </span>
-                                </div>
-                                <div className="text-sm text-gray-600">
-                                    {edu.school} {edu.location && `• ${edu.location}`}
-                                </div>
-                                {edu.description && (
-                                    <p className="text-sm text-gray-500 mt-1">{edu.description}</p>
-                                )}
+                                ))}
                             </div>
-                        ))}
-                    </div>
+                        </div>
+                    )}
+
+                    {languages.length > 0 && (
+                        <div>
+                            <h2 className="text-xs font-bold uppercase tracking-widest mb-6 text-gray-400">
+                                Langues
+                            </h2>
+                            <div className="space-y-2">
+                                {languages.map((lang) => (
+                                    <div key={lang.id} className="flex justify-between items-center text-sm">
+                                        <span className="font-medium text-gray-700">{lang.name}</span>
+                                        <span className="text-xs text-gray-500">{lang.level}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </section>
-            )}
-
-            <div className="grid grid-cols-2 gap-10">
-                {/* Skills */}
-                {skills.length > 0 && (
-                    <section>
-                        <h3 className="text-sm font-semibold uppercase tracking-wider mb-4 text-gray-900 border-b pb-2">
-                            Compétences
-                        </h3>
-                        <div className="space-y-1">
-                            {skills.map((skill) => (
-                                <div key={skill.id} className="text-sm text-gray-700">
-                                    • {skill.name}
-                                </div>
-                            ))}
-                        </div>
-                    </section>
-                )}
-
-                {/* Languages */}
-                {languages.length > 0 && (
-                    <section>
-                        <h3 className="text-sm font-semibold uppercase tracking-wider mb-4 text-gray-900 border-b pb-2">
-                            Langues
-                        </h3>
-                        <div className="space-y-1">
-                            {languages.map((lang) => (
-                                <div key={lang.id} className="flex justify-between text-sm">
-                                    <span className="text-gray-700">{lang.name}</span>
-                                    <span className="text-gray-500 text-xs">{lang.level}</span>
-                                </div>
-                            ))}
-                        </div>
-                    </section>
-                )}
             </div>
         </div>
     )

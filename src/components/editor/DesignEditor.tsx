@@ -8,32 +8,32 @@ import { Check } from "lucide-react"
 const TEMPLATES = [
     {
         id: 'modern',
-        name: 'Moderne',
-        description: 'Design coloré et dynamique',
+        name: 'Premium Modern',
+        description: 'Design élégant avec timeline visuelle',
         preview: '/templates/modern-preview.png'
     },
     {
-        id: 'minimalist',
-        name: 'Minimaliste',
-        description: 'Design épuré et professionnel',
-        preview: '/templates/minimalist-preview.png'
-    },
-    {
         id: 'creative',
-        name: 'Créatif',
-        description: 'Style visuel avec sidebar colorée',
+        name: 'Creative Studio',
+        description: 'Sidebar gradient premium',
         preview: '/templates/creative-preview.png'
     },
     {
         id: 'executive',
-        name: 'Exécutif',
-        description: 'Sobre et structuré pour les cadres',
+        name: 'Executive Pro',
+        description: 'Ultra-professionnel pour cadres',
         preview: '/templates/executive-preview.png'
     },
     {
+        id: 'minimalist',
+        name: 'Minimal Elegant',
+        description: 'Minimalisme raffiné',
+        preview: '/templates/minimalist-preview.png'
+    },
+    {
         id: 'professional',
-        name: 'Professionnel',
-        description: 'Style académique classique (Harvard)',
+        name: 'Corporate Elite',
+        description: 'Design corporate haut de gamme',
         preview: '/templates/professional-preview.png'
     }
 ]

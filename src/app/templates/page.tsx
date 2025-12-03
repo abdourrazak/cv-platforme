@@ -90,38 +90,38 @@ const sampleData = {
 const templates = [
     {
         id: "modern",
-        name: "Moderne",
-        description: "Design coloré et dynamique, idéal pour les profils créatifs et tech",
+        name: "Premium Modern",
+        description: "Design élégant avec typographie moderne et timeline visuelle",
         component: ModernTemplate,
         color: "blue"
     },
     {
         id: "creative",
-        name: "Créatif",
-        description: "Sidebar colorée avec mise en page visuelle, parfait pour designers et marketeurs",
+        name: "Creative Studio",
+        description: "Sidebar gradient premium, parfait pour les profils créatifs",
         component: CreativeTemplate,
         color: "purple"
     },
     {
         id: "executive",
-        name: "Exécutif",
-        description: "Design sobre et structuré pour cadres et managers",
+        name: "Executive Pro",
+        description: "Ultra-professionnel pour cadres dirigeants et managers",
         component: ExecutiveTemplate,
         color: "black"
     },
     {
         id: "minimalist",
-        name: "Minimaliste",
-        description: "Épuré et professionnel, compatible ATS",
+        name: "Minimal Elegant",
+        description: "Minimalisme raffiné avec touches de couleur subtiles",
         component: MinimalistTemplate,
         color: "green"
     },
     {
         id: "professional",
-        name: "Professionnel",
-        description: "Style académique classique (Harvard), idéal pour le juridique et la finance",
+        name: "Corporate Elite",
+        description: "Design corporate haut de gamme avec bandes de couleur",
         component: ProfessionalTemplate,
-        color: "black"
+        color: "blue"
     }
 ]
 

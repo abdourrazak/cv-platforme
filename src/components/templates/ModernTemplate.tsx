@@ -1,6 +1,6 @@
 import React from 'react'
 import { CVData } from '@/types/cv'
-import { MapPin, Mail, Phone, Globe, Linkedin } from 'lucide-react'
+import { Mail, Phone, MapPin, Linkedin, Globe } from 'lucide-react'
 
 interface TemplateProps {
     data: CVData
@@ -11,97 +11,112 @@ interface TemplateProps {
 export function ModernTemplate({ data, colorScheme = 'blue', fontFamily = 'inter' }: TemplateProps) {
     const { personalInfo, summary, experiences, education, skills, languages } = data
 
-    // Mapping des couleurs pour Tailwind (simplifié pour l'exemple)
     const colors = {
-        blue: 'text-blue-600',
-        purple: 'text-purple-600',
-        green: 'text-green-600',
-        red: 'text-red-600',
-        black: 'text-gray-900',
+        blue: { primary: '#2563eb', light: '#dbeafe', accent: '#1e40af' },
+        purple: { primary: '#7c3aed', light: '#ede9fe', accent: '#5b21b6' },
+        green: { primary: '#059669', light: '#d1fae5', accent: '#047857' },
+        red: { primary: '#dc2626', light: '#fee2e2', accent: '#b91c1c' },
+        black: { primary: '#1f2937', light: '#f3f4f6', accent: '#111827' },
     }
 
-    const bgColors = {
-        blue: 'bg-blue-600',
-        purple: 'bg-purple-600',
-        green: 'bg-green-600',
-        red: 'bg-red-600',
-        black: 'bg-gray-900',
-    }
-
-    const primaryColor = colors[colorScheme as keyof typeof colors] || colors.blue
-    const primaryBg = bgColors[colorScheme as keyof typeof bgColors] || bgColors.blue
+    const theme = colors[colorScheme as keyof typeof colors] || colors.blue
 
     return (
-        <div className="w-full h-full bg-white min-h-[297mm] p-8 shadow-lg text-gray-800" id="cv-preview">
-            {/* Header */}
-            <header className="border-b-2 border-gray-100 pb-8 mb-8">
-                <h1 className={`text-4xl font-bold mb-2 uppercase tracking-tight ${primaryColor}`}>
-                    {personalInfo.firstName} {personalInfo.lastName}
-                </h1>
-                <h2 className="text-xl text-gray-600 font-medium mb-4">{personalInfo.title}</h2>
+        <div className="w-full h-full min-h-[297mm] bg-white p-12 font-sans" id="cv-preview">
+            {/* Header avec design moderne */}
+            <header className="mb-10">
+                <div className="flex items-start justify-between mb-6">
+                    <div className="flex-1">
+                        <h1 className="text-5xl font-bold mb-2 tracking-tight" style={{ color: theme.primary }}>
+                            {personalInfo.firstName} {personalInfo.lastName}
+                        </h1>
+                        <div className="h-1 w-24 mb-4" style={{ backgroundColor: theme.primary }}></div>
+                        <p className="text-xl text-gray-600 font-medium tracking-wide uppercase">
+                            {personalInfo.title}
+                        </p>
+                    </div>
+                    {personalInfo.photo && (
+                        <div className="w-32 h-32 rounded-lg overflow-hidden shadow-lg border-4" style={{ borderColor: theme.light }}>
+                            <img src={personalInfo.photo} alt="Profile" className="w-full h-full object-cover" />
+                        </div>
+                    )}
+                </div>
 
-                <div className="flex flex-wrap gap-4 text-sm text-gray-500">
+                <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-sm text-gray-600">
                     {personalInfo.email && (
-                        <div className="flex items-center gap-1">
-                            <Mail size={14} />
+                        <div className="flex items-center gap-2">
+                            <Mail size={16} style={{ color: theme.primary }} />
                             <span>{personalInfo.email}</span>
                         </div>
                     )}
                     {personalInfo.phone && (
-                        <div className="flex items-center gap-1">
-                            <Phone size={14} />
+                        <div className="flex items-center gap-2">
+                            <Phone size={16} style={{ color: theme.primary }} />
                             <span>{personalInfo.phone}</span>
                         </div>
                     )}
                     {(personalInfo.city || personalInfo.country) && (
-                        <div className="flex items-center gap-1">
-                            <MapPin size={14} />
+                        <div className="flex items-center gap-2">
+                            <MapPin size={16} style={{ color: theme.primary }} />
                             <span>{[personalInfo.city, personalInfo.country].filter(Boolean).join(', ')}</span>
                         </div>
                     )}
-                    {personalInfo.website && (
-                        <div className="flex items-center gap-1">
-                            <Globe size={14} />
-                            <span>{personalInfo.website}</span>
+                    {personalInfo.linkedin && (
+                        <div className="flex items-center gap-2">
+                            <Linkedin size={16} style={{ color: theme.primary }} />
+                            <span className="truncate">{personalInfo.linkedin}</span>
                         </div>
                     )}
-                    {personalInfo.linkedin && (
-                        <div className="flex items-center gap-1">
-                            <Linkedin size={14} />
-                            <span>{personalInfo.linkedin}</span>
+                    {personalInfo.website && (
+                        <div className="flex items-center gap-2">
+                            <Globe size={16} style={{ color: theme.primary }} />
+                            <span className="truncate">{personalInfo.website}</span>
                         </div>
                     )}
                 </div>
             </header>
 
-            <div className="grid grid-cols-12 gap-8">
-                {/* Main Content */}
-                <div className="col-span-8 space-y-8">
-                    {/* Summary */}
-                    {summary && (
-                        <section>
-                            <h3 className={`text-lg font-bold uppercase mb-3 border-b pb-1 ${primaryColor}`}>Profil</h3>
-                            <p className="text-sm leading-relaxed text-gray-600">{summary}</p>
-                        </section>
-                    )}
+            {/* Summary */}
+            {summary && (
+                <section className="mb-8">
+                    <h2 className="text-lg font-bold uppercase tracking-wider mb-3 pb-2 border-b-2" style={{ color: theme.primary, borderColor: theme.primary }}>
+                        Profil Professionnel
+                    </h2>
+                    <p className="text-gray-700 leading-relaxed text-justify">
+                        {summary}
+                    </p>
+                </section>
+            )}
 
+            <div className="grid grid-cols-3 gap-8">
+                {/* Main Column */}
+                <div className="col-span-2 space-y-8">
                     {/* Experience */}
                     {experiences.length > 0 && (
                         <section>
-                            <h3 className={`text-lg font-bold uppercase mb-4 border-b pb-1 ${primaryColor}`}>Expérience Professionnelle</h3>
+                            <h2 className="text-lg font-bold uppercase tracking-wider mb-4 pb-2 border-b-2" style={{ color: theme.primary, borderColor: theme.primary }}>
+                                Expérience Professionnelle
+                            </h2>
                             <div className="space-y-6">
-                                {experiences.map((exp) => (
-                                    <div key={exp.id}>
-                                        <div className="flex justify-between items-baseline mb-1">
-                                            <h4 className="font-bold text-gray-800">{exp.position}</h4>
-                                            <span className="text-xs text-gray-500 font-medium">
-                                                {exp.startDate} - {exp.current ? 'Présent' : exp.endDate}
-                                            </span>
+                                {experiences.map((exp, index) => (
+                                    <div key={exp.id} className="relative pl-6">
+                                        <div className="absolute left-0 top-2 w-3 h-3 rounded-full" style={{ backgroundColor: theme.primary }}></div>
+                                        {index < experiences.length - 1 && (
+                                            <div className="absolute left-[5px] top-5 w-0.5 h-full" style={{ backgroundColor: theme.light }}></div>
+                                        )}
+                                        <div className="mb-2">
+                                            <h3 className="text-lg font-bold text-gray-900">{exp.position}</h3>
+                                            <div className="flex items-center justify-between text-sm mt-1">
+                                                <span className="font-semibold" style={{ color: theme.primary }}>{exp.company}</span>
+                                                <span className="text-gray-500 text-xs">
+                                                    {exp.startDate} - {exp.current ? 'Présent' : exp.endDate}
+                                                </span>
+                                            </div>
+                                            <p className="text-xs text-gray-500 mt-0.5">{exp.location}</p>
                                         </div>
-                                        <div className="text-sm font-medium text-gray-600 mb-2">
-                                            {exp.company} {exp.location && `• ${exp.location}`}
-                                        </div>
-                                        <p className="text-sm text-gray-600 whitespace-pre-line">{exp.description}</p>
+                                        <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-line">
+                                            {exp.description}
+                                        </p>
                                     </div>
                                 ))}
                             </div>
@@ -111,21 +126,21 @@ export function ModernTemplate({ data, colorScheme = 'blue', fontFamily = 'inter
                     {/* Education */}
                     {education.length > 0 && (
                         <section>
-                            <h3 className={`text-lg font-bold uppercase mb-4 border-b pb-1 ${primaryColor}`}>Formation</h3>
+                            <h2 className="text-lg font-bold uppercase tracking-wider mb-4 pb-2 border-b-2" style={{ color: theme.primary, borderColor: theme.primary }}>
+                                Formation
+                            </h2>
                             <div className="space-y-4">
                                 {education.map((edu) => (
                                     <div key={edu.id}>
-                                        <div className="flex justify-between items-baseline mb-1">
-                                            <h4 className="font-bold text-gray-800">{edu.degree}</h4>
-                                            <span className="text-xs text-gray-500 font-medium">
-                                                {edu.startDate} - {edu.current ? 'Présent' : edu.endDate}
+                                        <h3 className="font-bold text-gray-900">{edu.degree}</h3>
+                                        <div className="flex items-center justify-between text-sm mt-1">
+                                            <span className="font-medium" style={{ color: theme.primary }}>{edu.institution}</span>
+                                            <span className="text-gray-500 text-xs">
+                                                {edu.startDate} - {edu.endDate}
                                             </span>
                                         </div>
-                                        <div className="text-sm text-gray-600">
-                                            {edu.institution} {edu.location && `• ${edu.location}`}
-                                        </div>
                                         {edu.description && (
-                                            <p className="text-sm text-gray-500 mt-1">{edu.description}</p>
+                                            <p className="text-sm text-gray-600 mt-1">{edu.description}</p>
                                         )}
                                     </div>
                                 ))}
@@ -135,19 +150,31 @@ export function ModernTemplate({ data, colorScheme = 'blue', fontFamily = 'inter
                 </div>
 
                 {/* Sidebar */}
-                <div className="col-span-4 space-y-8">
+                <div className="space-y-8">
                     {/* Skills */}
                     {skills.length > 0 && (
                         <section>
-                            <h3 className={`text-lg font-bold uppercase mb-4 border-b pb-1 ${primaryColor}`}>Compétences</h3>
-                            <div className="flex flex-wrap gap-2">
+                            <h2 className="text-lg font-bold uppercase tracking-wider mb-4 pb-2 border-b-2" style={{ color: theme.primary, borderColor: theme.primary }}>
+                                Compétences
+                            </h2>
+                            <div className="space-y-3">
                                 {skills.map((skill) => (
-                                    <span
-                                        key={skill.id}
-                                        className={`text-xs font-medium px-2 py-1 rounded bg-gray-100 text-gray-700`}
-                                    >
-                                        {skill.name}
-                                    </span>
+                                    <div key={skill.id}>
+                                        <div className="flex justify-between items-center mb-1">
+                                            <span className="text-sm font-medium text-gray-700">{skill.name}</span>
+                                        </div>
+                                        <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                                            <div
+                                                className="h-full rounded-full transition-all"
+                                                style={{
+                                                    backgroundColor: theme.primary,
+                                                    width: skill.level === 'expert' ? '100%' :
+                                                        skill.level === 'advanced' ? '80%' :
+                                                            skill.level === 'intermediate' ? '60%' : '40%'
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
                                 ))}
                             </div>
                         </section>
@@ -156,12 +183,16 @@ export function ModernTemplate({ data, colorScheme = 'blue', fontFamily = 'inter
                     {/* Languages */}
                     {languages.length > 0 && (
                         <section>
-                            <h3 className={`text-lg font-bold uppercase mb-4 border-b pb-1 ${primaryColor}`}>Langues</h3>
-                            <div className="space-y-2">
+                            <h2 className="text-lg font-bold uppercase tracking-wider mb-4 pb-2 border-b-2" style={{ color: theme.primary, borderColor: theme.primary }}>
+                                Langues
+                            </h2>
+                            <div className="space-y-3">
                                 {languages.map((lang) => (
-                                    <div key={lang.id} className="flex justify-between items-center text-sm">
-                                        <span className="font-medium text-gray-700">{lang.name}</span>
-                                        <span className="text-gray-500 text-xs">{lang.level}</span>
+                                    <div key={lang.id} className="flex justify-between items-center">
+                                        <span className="text-sm font-medium text-gray-700">{lang.name}</span>
+                                        <span className="text-xs px-2 py-1 rounded" style={{ backgroundColor: theme.light, color: theme.accent }}>
+                                            {lang.level}
+                                        </span>
                                     </div>
                                 ))}
                             </div>
