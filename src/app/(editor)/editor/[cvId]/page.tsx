@@ -1,6 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useSession } from "next-auth/react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft, Save, Download, Share2, LayoutTemplate } from "lucide-react"
 import Link from "next/link"
@@ -10,21 +12,81 @@ import { PersonalInfoEditor } from "@/components/editor/cv-sections/PersonalInfo
 import { ModernTemplate } from "@/components/templates/ModernTemplate"
 import { MinimalistTemplate } from "@/components/templates/MinimalistTemplate"
 import { DesignEditor } from "@/components/editor/DesignEditor"
-
 import { SummaryEditor } from "@/components/editor/cv-sections/SummaryEditor"
 import { ExperienceEditor } from "@/components/editor/cv-sections/ExperienceEditor"
 import { EducationEditor } from "@/components/editor/cv-sections/EducationEditor"
 import { SkillsEditor } from "@/components/editor/cv-sections/SkillsEditor"
 import { LanguagesEditor } from "@/components/editor/cv-sections/LanguagesEditor"
-
 import { downloadPDF } from "@/lib/pdf"
 
 export default function EditorPage({ params }: { params: { cvId: string } }) {
     const [activeTab, setActiveTab] = useState("content")
-    const { cv } = useCV()
+    const [saving, setSaving] = useState(false)
+    const [lastSaved, setLastSaved] = useState<Date | null>(null)
+    const { cv, dispatch } = useCV()
+    const { data: session, status } = useSession()
+    const router = useRouter()
+
+    // Charger le CV depuis la base de données
+    useEffect(() => {
+        if (status === "unauthenticated") {
+            router.push("/auth/signin")
+            return
+        }
+
+        if (status === "authenticated" && params.cvId) {
+            loadCV()
+        }
+    }, [status, params.cvId])
+
+    const loadCV = async () => {
+        try {
+            const response = await fetch(`/api/cvs/${params.cvId}`)
+            if (response.ok) {
+                const cvData = await response.json()
+                dispatch({
+                    type: 'SET_CV',
+                    payload: cvData
+                })
+            } else if (response.status === 404) {
+                router.push("/dashboard")
+            }
+        } catch (error) {
+            console.error("Erreur lors du chargement du CV:", error)
+        }
+    }
+
+    const handleSave = async () => {
+        setSaving(true)
+        try {
+            const response = await fetch(`/api/cvs/${params.cvId}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(cv)
+            })
+
+            if (response.ok) {
+                setLastSaved(new Date())
+            }
+        } catch (error) {
+            console.error("Erreur lors de la sauvegarde:", error)
+        } finally {
+            setSaving(false)
+        }
+    }
 
     const handleDownload = async () => {
         await downloadPDF("cv-preview", `${cv.data.personalInfo.firstName}-${cv.data.personalInfo.lastName}-CV.pdf`)
+    }
+
+    if (status === "loading") {
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+            </div>
+        )
     }
 
     return (
@@ -42,9 +104,15 @@ export default function EditorPage({ params }: { params: { cvId: string } }) {
                             type="text"
                             defaultValue={cv.title}
                             className="font-semibold bg-transparent border-none p-0 focus:ring-0 text-sm md:text-base"
+                            onBlur={(e) => {
+                                dispatch({
+                                    type: 'UPDATE_METADATA',
+                                    payload: { title: e.target.value }
+                                })
+                            }}
                         />
                         <span className="text-xs text-muted-foreground">
-                            Dernière modification : {new Date().toLocaleTimeString()}
+                            {lastSaved ? `Sauvegardé à ${lastSaved.toLocaleTimeString()}` : 'Non sauvegardé'}
                         </span>
                     </div>
                 </div>
@@ -55,8 +123,14 @@ export default function EditorPage({ params }: { params: { cvId: string } }) {
                         Changer de modèle
                     </Button>
                     <div className="h-6 w-px bg-border mx-2 hidden md:block"></div>
-                    <Button variant="ghost" size="icon" title="Sauvegarder">
-                        <Save className="w-5 h-5" />
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        title="Sauvegarder"
+                        onClick={handleSave}
+                        disabled={saving}
+                    >
+                        <Save className={`w-5 h-5 ${saving ? 'animate-pulse' : ''}`} />
                     </Button>
                     <Button variant="outline" size="sm">
                         <Share2 className="w-4 h-4 mr-2" />
@@ -108,7 +182,7 @@ export default function EditorPage({ params }: { params: { cvId: string } }) {
 
                             <TabsContent value="settings" className="mt-0">
                                 <div className="text-center py-10 text-muted-foreground">
-                                    Paramètres du CV à venir...
+                                    Paramètres à venir...
                                 </div>
                             </TabsContent>
                         </div>
