@@ -146,27 +146,30 @@ export default function DashboardPage() {
                         <LogOut className="w-4 h-4 mr-2" />
                         Déconnexion
                     </Button>
-                    <Button onClick={createNewCV}>
-                        <Plus className="w-4 h-4 mr-2" />
-                        Nouveau CV
+                    <Button asChild>
+                        <Link href="/templates">
+                            <Plus className="w-4 h-4 mr-2" />
+                            Nouveau CV
+                        </Link>
                     </Button>
                 </div>
             </div>
 
             <StaggerChildren className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {/* Carte "Créer un nouveau CV" */}
-                <Card
-                    onClick={createNewCV}
-                    className="h-full border-dashed border-2 hover:border-primary hover:bg-primary/5 transition-all cursor-pointer flex flex-col items-center justify-center p-8 min-h-[250px]"
-                >
-                    <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4 hover:scale-110 transition-transform">
-                        <Plus className="w-8 h-8 text-primary" />
-                    </div>
-                    <h3 className="font-semibold text-lg">Créer un nouveau CV</h3>
-                    <p className="text-sm text-muted-foreground text-center mt-2">
-                        Commencez avec un template professionnel
-                    </p>
-                </Card>
+                <Link href="/templates">
+                    <Card
+                        className="h-full border-dashed border-2 hover:border-primary hover:bg-primary/5 transition-all cursor-pointer flex flex-col items-center justify-center p-8 min-h-[250px]"
+                    >
+                        <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4 hover:scale-110 transition-transform">
+                            <Plus className="w-8 h-8 text-primary" />
+                        </div>
+                        <h3 className="font-semibold text-lg">Créer un nouveau CV</h3>
+                        <p className="text-sm text-muted-foreground text-center mt-2">
+                            Choisissez parmi 5 templates professionnels
+                        </p>
+                    </Card>
+                </Link>
 
                 {/* Liste des CVs existants */}
                 {cvs.map((cv) => (
