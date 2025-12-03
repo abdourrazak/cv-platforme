@@ -1,3 +1,8 @@
+"use client"
+
+import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { useSession } from "next-auth/react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ModernTemplate } from "@/components/templates/ModernTemplate"
@@ -5,7 +10,7 @@ import { MinimalistTemplate } from "@/components/templates/MinimalistTemplate"
 import { CreativeTemplate } from "@/components/templates/CreativeTemplate"
 import { ExecutiveTemplate } from "@/components/templates/ExecutiveTemplate"
 import { ProfessionalTemplate } from "@/components/templates/ProfessionalTemplate"
-import { ArrowLeft, Check } from "lucide-react"
+import { ArrowLeft, Check, Loader2 } from "lucide-react"
 
 // Données d'exemple professionnelles
 const sampleData = {
@@ -126,6 +131,63 @@ const templates = [
 ]
 
 export default function TemplatesPage() {
+    const router = useRouter()
+    const { data: session } = useSession()
+    const [creatingTemplate, setCreatingTemplate] = useState<string | null>(null)
+
+    const createCV = async (templateId: string, templateColor: string) => {
+        if (!session) {
+            router.push('/auth/signin')
+            return
+        }
+
+        setCreatingTemplate(templateId)
+        try {
+            const response = await fetch("/api/cvs", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    title: "Nouveau CV",
+                    templateId: templateId,
+                    colorScheme: templateColor,
+                    fontFamily: "inter",
+                    data: {
+                        personalInfo: {
+                            firstName: "",
+                            lastName: "",
+                            title: "",
+                            email: session?.user?.email || "",
+                            phone: "",
+                            address: "",
+                            city: "",
+                            country: ""
+                        },
+                        summary: "",
+                        experiences: [],
+                        education: [],
+                        skills: [],
+                        languages: [],
+                        projects: [],
+                        interests: [],
+                        customSections: [],
+                        sectionOrder: ["personalInfo", "summary", "experiences", "education", "skills", "languages"]
+                    }
+                })
+            })
+
+            if (response.ok) {
+                const newCV = await response.json()
+                router.push(`/editor/${newCV.id}`)
+            }
+        } catch (error) {
+            console.error("Erreur lors de la création du CV:", error)
+        } finally {
+            setCreatingTemplate(null)
+        }
+    }
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50">
             {/* Header */}
@@ -152,6 +214,8 @@ export default function TemplatesPage() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                     {templates.map((template) => {
                         const TemplateComponent = template.component
+                        const isCreating = creatingTemplate === template.id
+
                         return (
                             <div key={template.id} className="space-y-4">
                                 <div className="flex items-start justify-between">
@@ -159,15 +223,28 @@ export default function TemplatesPage() {
                                         <h2 className="text-2xl font-bold text-gray-900">{template.name}</h2>
                                         <p className="text-sm text-gray-600 mt-1">{template.description}</p>
                                     </div>
-                                    <Button asChild>
-                                        <Link href={`/dashboard?template=${template.id}`}>
-                                            <Check className="w-4 h-4 mr-2" />
-                                            Choisir
-                                        </Link>
+                                    <Button
+                                        onClick={() => createCV(template.id, template.color)}
+                                        disabled={isCreating}
+                                    >
+                                        {isCreating ? (
+                                            <>
+                                                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                                Création...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Check className="w-4 h-4 mr-2" />
+                                                Choisir
+                                            </>
+                                        )}
                                     </Button>
                                 </div>
 
-                                <div className="bg-white rounded-lg shadow-2xl overflow-hidden border-2 border-gray-200 hover:border-primary transition-all cursor-pointer">
+                                <div
+                                    className="bg-white rounded-lg shadow-2xl overflow-hidden border-2 border-gray-200 hover:border-primary transition-all cursor-pointer"
+                                    onClick={() => createCV(template.id, template.color)}
+                                >
                                     <div className="transform scale-[0.5] origin-top-left w-[200%] h-[200%]">
                                         <div className="w-[210mm] min-h-[297mm]">
                                             <TemplateComponent
