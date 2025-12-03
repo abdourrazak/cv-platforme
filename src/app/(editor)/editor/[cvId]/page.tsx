@@ -11,6 +11,8 @@ import { useCV } from "@/context/CVContext"
 import { PersonalInfoEditor } from "@/components/editor/cv-sections/PersonalInfoEditor"
 import { ModernTemplate } from "@/components/templates/ModernTemplate"
 import { MinimalistTemplate } from "@/components/templates/MinimalistTemplate"
+import { CreativeTemplate } from "@/components/templates/CreativeTemplate"
+import { ExecutiveTemplate } from "@/components/templates/ExecutiveTemplate"
 import { DesignEditor } from "@/components/editor/DesignEditor"
 import { SummaryEditor } from "@/components/editor/cv-sections/SummaryEditor"
 import { ExperienceEditor } from "@/components/editor/cv-sections/ExperienceEditor"
@@ -90,6 +92,20 @@ export default function EditorPage({ params }: { params: { cvId: string } }) {
         )
     }
 
+    const renderTemplate = () => {
+        switch (cv.templateId) {
+            case 'minimalist':
+                return <MinimalistTemplate data={cv.data} colorScheme={cv.colorScheme} fontFamily={cv.fontFamily} />
+            case 'creative':
+                return <CreativeTemplate data={cv.data} colorScheme={cv.colorScheme} fontFamily={cv.fontFamily} />
+            case 'executive':
+                return <ExecutiveTemplate data={cv.data} colorScheme={cv.colorScheme} fontFamily={cv.fontFamily} />
+            case 'modern':
+            default:
+                return <ModernTemplate data={cv.data} colorScheme={cv.colorScheme} fontFamily={cv.fontFamily} />
+        }
+    }
+
     return (
         <div className="flex flex-col h-full">
             {/* Toolbar supérieure */}
@@ -119,7 +135,7 @@ export default function EditorPage({ params }: { params: { cvId: string } }) {
                 </div>
 
                 <div className="flex items-center gap-2">
-                    <Button variant="outline" size="sm" className="hidden md:flex">
+                    <Button variant="outline" size="sm" className="hidden md:flex" onClick={() => setActiveTab("design")}>
                         <LayoutTemplate className="w-4 h-4 mr-2" />
                         Changer de modèle
                     </Button>
@@ -190,19 +206,7 @@ export default function EditorPage({ params }: { params: { cvId: string } }) {
                 {/* Zone de prévisualisation (Droite) */}
                 <main className="flex-1 bg-muted/30 overflow-y-auto p-8 flex justify-center">
                     <div className="w-[210mm] min-h-[297mm] bg-white shadow-xl rounded-sm origin-top transform scale-[0.6] md:scale-[0.8] lg:scale-[0.9] xl:scale-100 transition-transform duration-200">
-                        {cv.templateId === 'minimalist' ? (
-                            <MinimalistTemplate
-                                data={cv.data}
-                                colorScheme={cv.colorScheme}
-                                fontFamily={cv.fontFamily}
-                            />
-                        ) : (
-                            <ModernTemplate
-                                data={cv.data}
-                                colorScheme={cv.colorScheme}
-                                fontFamily={cv.fontFamily}
-                            />
-                        )}
+                        {renderTemplate()}
                     </div>
                 </main>
             </div>

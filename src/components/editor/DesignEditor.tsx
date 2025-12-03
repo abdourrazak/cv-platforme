@@ -17,6 +17,18 @@ const TEMPLATES = [
         name: 'Minimaliste',
         description: 'Design épuré et professionnel',
         preview: '/templates/minimalist-preview.png'
+    },
+    {
+        id: 'creative',
+        name: 'Créatif',
+        description: 'Style visuel avec sidebar colorée',
+        preview: '/templates/creative-preview.png'
+    },
+    {
+        id: 'executive',
+        name: 'Exécutif',
+        description: 'Sobre et structuré pour les cadres',
+        preview: '/templates/executive-preview.png'
     }
 ]
 
@@ -56,8 +68,8 @@ export function DesignEditor() {
                         <div
                             key={template.id}
                             className={`relative border-2 rounded-lg p-4 cursor-pointer transition-all ${cv.templateId === template.id
-                                    ? 'border-primary bg-primary/5'
-                                    : 'border-gray-200 hover:border-gray-300'
+                                ? 'border-primary bg-primary/5'
+                                : 'border-gray-200 hover:border-gray-300'
                                 }`}
                             onClick={() => handleTemplateChange(template.id)}
                         >
@@ -84,8 +96,8 @@ export function DesignEditor() {
                                 key={scheme.value}
                                 onClick={() => handleColorChange(scheme.value)}
                                 className={`relative aspect-square rounded-lg ${scheme.color} transition-all ${cv.colorScheme === scheme.value
-                                        ? 'ring-2 ring-offset-2 ring-primary scale-110'
-                                        : 'hover:scale-105'
+                                    ? 'ring-2 ring-offset-2 ring-primary scale-110'
+                                    : 'hover:scale-105'
                                     }`}
                                 title={scheme.label}
                             >

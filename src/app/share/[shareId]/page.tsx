@@ -2,6 +2,8 @@ import { notFound } from "next/navigation"
 import { prisma } from "@/lib/prisma"
 import { ModernTemplate } from "@/components/templates/ModernTemplate"
 import { MinimalistTemplate } from "@/components/templates/MinimalistTemplate"
+import { CreativeTemplate } from "@/components/templates/CreativeTemplate"
+import { ExecutiveTemplate } from "@/components/templates/ExecutiveTemplate"
 import { Button } from "@/components/ui/button"
 import { Download, FileText } from "lucide-react"
 import Link from "next/link"
@@ -35,6 +37,20 @@ export default async function SharedCVPage({ params }: { params: { shareId: stri
 
     if (!cv) {
         notFound()
+    }
+
+    const renderTemplate = () => {
+        switch (cv.templateId) {
+            case 'minimalist':
+                return <MinimalistTemplate data={cv.data} colorScheme={cv.colorScheme} fontFamily={cv.fontFamily} />
+            case 'creative':
+                return <CreativeTemplate data={cv.data} colorScheme={cv.colorScheme} fontFamily={cv.fontFamily} />
+            case 'executive':
+                return <ExecutiveTemplate data={cv.data} colorScheme={cv.colorScheme} fontFamily={cv.fontFamily} />
+            case 'modern':
+            default:
+                return <ModernTemplate data={cv.data} colorScheme={cv.colorScheme} fontFamily={cv.fontFamily} />
+        }
     }
 
     return (
@@ -73,19 +89,7 @@ export default async function SharedCVPage({ params }: { params: { shareId: stri
                     id="cv-preview"
                     className="w-[210mm] min-h-[297mm] bg-white shadow-2xl rounded-lg overflow-hidden"
                 >
-                    {cv.templateId === 'minimalist' ? (
-                        <MinimalistTemplate
-                            data={cv.data}
-                            colorScheme={cv.colorScheme}
-                            fontFamily={cv.fontFamily}
-                        />
-                    ) : (
-                        <ModernTemplate
-                            data={cv.data}
-                            colorScheme={cv.colorScheme}
-                            fontFamily={cv.fontFamily}
-                        />
-                    )}
+                    {renderTemplate()}
                 </div>
             </main>
 
