@@ -17,6 +17,7 @@ import { ExperienceEditor } from "@/components/editor/cv-sections/ExperienceEdit
 import { EducationEditor } from "@/components/editor/cv-sections/EducationEditor"
 import { SkillsEditor } from "@/components/editor/cv-sections/SkillsEditor"
 import { LanguagesEditor } from "@/components/editor/cv-sections/LanguagesEditor"
+import { ShareDialog } from "@/components/editor/ShareDialog"
 import { downloadPDF } from "@/lib/pdf"
 
 export default function EditorPage({ params }: { params: { cvId: string } }) {
@@ -132,10 +133,7 @@ export default function EditorPage({ params }: { params: { cvId: string } }) {
                     >
                         <Save className={`w-5 h-5 ${saving ? 'animate-pulse' : ''}`} />
                     </Button>
-                    <Button variant="outline" size="sm">
-                        <Share2 className="w-4 h-4 mr-2" />
-                        Partager
-                    </Button>
+                    <ShareDialog cvId={params.cvId} currentShareId={cv.shareId} />
                     <Button size="sm" onClick={handleDownload}>
                         <Download className="w-4 h-4 mr-2" />
                         Exporter PDF
