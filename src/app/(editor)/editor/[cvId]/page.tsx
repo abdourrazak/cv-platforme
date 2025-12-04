@@ -112,18 +112,18 @@ export default function EditorPage({ params }: { params: { cvId: string } }) {
     return (
         <div className="flex flex-col h-full">
             {/* Toolbar supérieure */}
-            <header className="h-16 border-b flex items-center justify-between px-4 bg-card shrink-0 z-10">
-                <div className="flex items-center gap-4">
+            <header className="h-14 border-b flex items-center justify-between px-4 bg-white shrink-0 z-10 shadow-sm">
+                <div className="flex items-center gap-3">
                     <Button variant="ghost" size="icon" asChild>
                         <Link href="/dashboard">
-                            <ArrowLeft className="w-5 h-5" />
+                            <ArrowLeft className="w-4 h-4" />
                         </Link>
                     </Button>
                     <div className="flex flex-col">
                         <input
                             type="text"
                             defaultValue={cv.title}
-                            className="font-semibold bg-transparent border-none p-0 focus:ring-0 text-sm md:text-base"
+                            className="font-semibold bg-transparent border-none p-0 focus:ring-0 text-sm"
                             onBlur={(e) => {
                                 dispatch({
                                     type: 'UPDATE_METADATA',
@@ -140,9 +140,9 @@ export default function EditorPage({ params }: { params: { cvId: string } }) {
                 <div className="flex items-center gap-2">
                     <Button variant="outline" size="sm" className="hidden md:flex" onClick={() => setActiveTab("design")}>
                         <LayoutTemplate className="w-4 h-4 mr-2" />
-                        Changer de modèle
+                        Template
                     </Button>
-                    <div className="h-6 w-px bg-border mx-2 hidden md:block"></div>
+                    <div className="h-6 w-px bg-border mx-1 hidden md:block"></div>
                     <Button
                         variant="ghost"
                         size="icon"
@@ -150,12 +150,12 @@ export default function EditorPage({ params }: { params: { cvId: string } }) {
                         onClick={handleSave}
                         disabled={saving}
                     >
-                        <Save className={`w-5 h-5 ${saving ? 'animate-pulse' : ''}`} />
+                        <Save className={`w-4 h-4 ${saving ? 'animate-pulse' : ''}`} />
                     </Button>
                     <ShareDialog cvId={params.cvId} currentShareId={cv.shareId} />
                     <Button size="sm" onClick={handleDownload}>
                         <Download className="w-4 h-4 mr-2" />
-                        Exporter PDF
+                        PDF
                     </Button>
                 </div>
             </header>
@@ -163,9 +163,9 @@ export default function EditorPage({ params }: { params: { cvId: string } }) {
             {/* Zone principale */}
             <div className="flex-1 flex overflow-hidden">
                 {/* Panneau latéral gauche (Édition) */}
-                <aside className="w-full md:w-[450px] border-r bg-card flex flex-col">
+                <aside className="w-full md:w-[400px] border-r bg-white flex flex-col shadow-sm">
                     <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
-                        <div className="px-4 pt-4 pb-2 border-b shrink-0">
+                        <div className="px-4 pt-4 pb-2 border-b shrink-0 bg-slate-50">
                             <TabsList className="w-full grid grid-cols-3">
                                 <TabsTrigger value="content">Contenu</TabsTrigger>
                                 <TabsTrigger value="design">Design</TabsTrigger>
@@ -173,7 +173,7 @@ export default function EditorPage({ params }: { params: { cvId: string } }) {
                             </TabsList>
                         </div>
 
-                        <TabsContent value="content" className="flex-1 overflow-y-auto p-4 bg-gray-50/50 m-0 space-y-8 pb-20">
+                        <TabsContent value="content" className="flex-1 overflow-y-auto p-4 bg-slate-50/50 m-0 space-y-6 pb-20">
                             <PersonalInfoEditor />
                             <SummaryEditor />
                             <div className="space-y-6">
@@ -205,9 +205,11 @@ export default function EditorPage({ params }: { params: { cvId: string } }) {
                 </aside>
 
                 {/* Zone de prévisualisation (Droite) */}
-                <main className="flex-1 bg-muted/30 overflow-y-auto p-8 flex justify-center">
-                    <div className="w-[210mm] min-h-[297mm] bg-white shadow-xl rounded-sm origin-top transform scale-[0.6] md:scale-[0.8] lg:scale-[0.9] xl:scale-100 transition-transform duration-200">
-                        {renderTemplate()}
+                <main className="flex-1 bg-gradient-to-br from-slate-100 to-slate-200 overflow-y-auto p-6 flex items-start justify-center">
+                    <div className="w-full max-w-[210mm] my-4">
+                        <div className="bg-white shadow-2xl rounded-lg overflow-hidden border border-gray-200">
+                            {renderTemplate()}
+                        </div>
                     </div>
                 </main>
             </div>
